@@ -17,7 +17,7 @@ public final class KeyBindings {
 
     public void poll(Minecraft minecraft) {
         while (menu.consumeClick()) {
-            minecraft.setScreen(MnemeMenu.create(minecraft.screen));
+            Compat.show(minecraft, MnemeMenu.create(Compat.screen(minecraft)));
         }
     }
 }

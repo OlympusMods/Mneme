@@ -1,6 +1,7 @@
 package com.github.olympus.mneme.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +14,14 @@ public final class Compat {
 
     public static String dimension(Level level) {
         return level.dimension().location().getPath();
+    }
+
+    public static Screen screen(Minecraft minecraft) {
+        return minecraft.screen;
+    }
+
+    public static void show(Minecraft minecraft, Screen screen) {
+        minecraft.setScreen(screen);
     }
 
     public static void echo(Minecraft minecraft, String text) {

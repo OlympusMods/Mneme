@@ -136,7 +136,7 @@ public final class Macros {
             }
             boolean down = GLFW.glfwGetKey(window, macro.key()) == GLFW.GLFW_PRESS;
             boolean was = HELD.contains(macro.id());
-            if (down && !was && minecraft.screen == null) {
+            if (down && !was && Compat.screen(minecraft) == null) {
                 start(macro);
             }
             if (down) {
