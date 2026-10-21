@@ -8,6 +8,15 @@
   "mneme.tab.notes.tooltip": "Your notes and checklists.",
   "mneme.tab.appearance": "Appearance",
   "mneme.tab.appearance.tooltip": "Style, accent color and where toasts appear.",
+  "mneme.toast.preview": "This is how a Mneme toast looks",
   "mneme.notes.empty": "No notes yet",
-  "mneme.toast.preview": "This is how a Mneme toast looks"
+  "mneme.notes.new": "New note",
+  "mneme.notes.new.tooltip": "Starts an empty note.",
+  "mneme.notes.untitled": "Untitled",
+  "mneme.notes.no_text": "Empty note",
+  "mneme.notes.back": "Back to all notes",
+  "mneme.notes.title_hint": "Title",
+  "mneme.notes.body_hint": "Write something...",
+  "mneme.notes.delete": "Delete",
+  "mneme.notes.delete.tooltip": "Deletes this note for good."
 }

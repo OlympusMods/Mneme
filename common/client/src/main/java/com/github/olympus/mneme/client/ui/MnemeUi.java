@@ -1,5 +1,6 @@
 package com.github.olympus.mneme.client.ui;
 
+import com.github.olympus.mneme.client.MnemeData;
 import com.github.olympus.proteus.client.ui.AppearancePanel;
 import com.github.olympus.proteus.client.ui.ButtonKind;
 import com.github.olympus.proteus.client.ui.Theme;
@@ -19,11 +20,32 @@ public final class MnemeUi extends UiShell {
     }
 
     private final AppearancePanel appearance;
+    private final NotesPage notes;
     private Tab tab = Tab.NOTES;
 
     public MnemeUi(UiHost host) {
         super(host);
         this.appearance = new AppearancePanel(gui(), fade());
+        this.notes = new NotesPage(gui(), fade(), MnemeData.notes());
+    }
+
+    @Override
+    protected boolean onEscape() {
+        if (tab == Tab.NOTES && notes.editing()) {
+            notes.back();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onTick() {
+        MnemeData.notes().flush();
+    }
+
+    @Override
+    public void removed() {
+        MnemeData.notes().flush();
     }
 
     @Override
@@ -64,7 +86,7 @@ public final class MnemeUi extends UiShell {
 
         float before = beginContent();
         switch (tab) {
-            case NOTES -> renderNotes(ix, y, iw, contentHeight);
+            case NOTES -> notes.render(ix, y, iw, contentHeight);
             case APPEARANCE -> {
                 if (appearance.render(ix, y, iw, contentHeight, this::previewToast)) {
                     restartContentFade();
@@ -77,10 +99,6 @@ public final class MnemeUi extends UiShell {
                 null)) {
             requestClose();
         }
-    }
-
-    private void renderNotes(int ix, int y, int iw, int ch) {
-        gui().centered(text("mneme.notes.empty"), ix + iw / 2, y + ch / 2 - 4, gui().theme().textSecondary());
     }
 
     private void previewToast() {
