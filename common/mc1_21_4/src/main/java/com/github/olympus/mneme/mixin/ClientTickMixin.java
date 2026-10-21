@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/** Example mixin, kept so every loader project already has its mixin setup working. */
 @Mixin(Minecraft.class)
 public abstract class ClientTickMixin {
     @Inject(method = "tick", at = @At("HEAD"))

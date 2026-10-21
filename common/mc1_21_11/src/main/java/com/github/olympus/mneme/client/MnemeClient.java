@@ -39,7 +39,6 @@ public final class MnemeClient {
         keys = bindings;
     }
 
-    /** Runs at the start of every client tick, called from ClientTickMixin. */
     public static void tick(Minecraft minecraft) {
         keys().poll(minecraft);
     }
