@@ -5,13 +5,6 @@ import java.lang.reflect.Constructor;
 import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
 
-/**
- * Creates the key mappings for 26.1 and newer.
- *
- * <p>Newer versions replace GLFW with SDL: {@code InputConstants.Type.KEYSYM} became {@code KEYBOARD}, and key codes are now
- * SDL scancodes instead of GLFW key codes. The same jar has to load on both, so the key type and the default codes
- * are chosen at runtime instead of being compiled in.
- */
 public final class KeyFactory {
     private static final boolean SDL = isSdl();
 
@@ -23,8 +16,7 @@ public final class KeyFactory {
     }
 
     public static KeyBindings create(KeyMapping.Category category) {
-        // GLFW key codes before the SDL switch, SDL scancodes (USB HID usage ids) after it.
-        return new KeyBindings(key("action", GLFW.GLFW_KEY_K, 14, category));
+        return new KeyBindings(key("menu", GLFW.GLFW_KEY_N, 17, category));
     }
 
     private static boolean isSdl() {

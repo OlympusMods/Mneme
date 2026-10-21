@@ -5,7 +5,9 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
   "client": [
-    "ClientTickMixin"
+    "ChatMixin",
+    "ClientTickMixin",
+    "SendMixin"
   ],
   "injectors": {
     "defaultRequire": 1
