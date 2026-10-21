@@ -25,5 +25,7 @@
   "mneme.notes.item_remove": "Remove this item",
   "mneme.notes.item_add": "Add item",
   "mneme.notes.item_add.tooltip": "Press Enter in an item to add the next one.",
-  "mneme.notes.progress": "%s / %s"
+  "mneme.notes.progress": "%s / %s",
+  "mneme.notes.coords": "Coords",
+  "mneme.notes.coords.tooltip": "Writes your current position and dimension where the cursor is."
 }

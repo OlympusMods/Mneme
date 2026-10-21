@@ -1,5 +1,6 @@
 package com.github.olympus.mneme.client.ui;
 
+import com.github.olympus.mneme.client.GameInfo;
 import com.github.olympus.mneme.core.note.CheckItem;
 import com.github.olympus.mneme.core.note.Note;
 import com.github.olympus.mneme.core.note.NoteKind;
@@ -103,16 +104,21 @@ final class NotesPage {
     private void renderEditor(int ix, int y, int iw, int ch) {
         int back = 28;
         int delete = 62;
+        int coords = 70;
         if (gui.iconButton("note-back", ix, y, back, ROW, "left", ButtonKind.NORMAL, true,
                 text("mneme.notes.back"))) {
             back();
             return;
         }
-        String title = gui.field(TITLE, ix + back + GAP, y, iw - back - delete - 2 * GAP, ROW,
+        String title = gui.field(TITLE, ix + back + GAP, y, iw - back - delete - coords - 3 * GAP, ROW,
                 text("mneme.notes.title_hint"), 48);
         if (!title.equals(current.title())) {
             current.setTitle(title);
             store.markDirty();
+        }
+        if (gui.button("note-coords", ix + iw - delete - coords - GAP, y, coords, ROW, text("mneme.notes.coords"),
+                text("mneme.notes.coords.tooltip"))) {
+            insertCoordinates();
         }
         if (gui.button("note-delete", ix + iw - delete, y, delete, ROW, text("mneme.notes.delete"),
                 ButtonKind.DANGER, false, true, text("mneme.notes.delete.tooltip"))) {
@@ -177,6 +183,23 @@ final class NotesPage {
         if (gui.button("item-add", ix, y + listHeight + GAP, iw, ROW, text("mneme.notes.item_add"),
                 text("mneme.notes.item_add.tooltip"))) {
             addItem(current.items().size());
+        }
+    }
+
+    private void insertCoordinates() {
+        String coordinates = GameInfo.coordinates();
+        if (coordinates == null) {
+            return;
+        }
+        if (gui.insertAtFocus(coordinates)) {
+            return;
+        }
+        if (current.kind() == NoteKind.CHECKLIST) {
+            addItem(current.items().size());
+            gui.insertAtFocus(coordinates);
+        } else {
+            gui.focus(BODY);
+            gui.insertAtFocus(coordinates);
         }
     }
 
