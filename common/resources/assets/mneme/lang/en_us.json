@@ -27,5 +27,19 @@
   "mneme.notes.item_add.tooltip": "Press Enter in an item to add the next one.",
   "mneme.notes.progress": "%s / %s",
   "mneme.notes.coords": "Coords",
-  "mneme.notes.coords.tooltip": "Writes your current position and dimension where the cursor is."
+  "mneme.notes.coords.tooltip": "Writes your current position and dimension where the cursor is.",
+  "mneme.notes.color.red": "Red",
+  "mneme.notes.color.orange": "Orange",
+  "mneme.notes.color.yellow": "Yellow",
+  "mneme.notes.color.green": "Green",
+  "mneme.notes.color.teal": "Teal",
+  "mneme.notes.color.blue": "Blue",
+  "mneme.notes.color.violet": "Violet",
+  "mneme.notes.color.pink": "Pink",
+  "mneme.notes.material.paper": "Paper",
+  "mneme.notes.material.paper.tooltip": "Looks like Minecraft paper when pinned.",
+  "mneme.notes.material.plain": "Plain",
+  "mneme.notes.material.plain.tooltip": "Clean white sheet when pinned.",
+  "mneme.notes.material.black": "Black",
+  "mneme.notes.material.black.tooltip": "Dark card with light text when pinned."
 }

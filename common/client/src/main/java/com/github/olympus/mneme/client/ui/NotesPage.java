@@ -4,6 +4,7 @@ import com.github.olympus.mneme.client.GameInfo;
 import com.github.olympus.mneme.core.note.CheckItem;
 import com.github.olympus.mneme.core.note.Note;
 import com.github.olympus.mneme.core.note.NoteKind;
+import com.github.olympus.mneme.core.note.NoteMaterial;
 import com.github.olympus.mneme.core.note.NoteStore;
 import com.github.olympus.proteus.client.ui.ButtonKind;
 import com.github.olympus.proteus.client.ui.FadeCanvas;
@@ -86,12 +87,13 @@ final class NotesPage {
         for (Note note : notes) {
             String id = "note:" + note.id();
             gui.rowBackground(id, ix, ry, width, ENTRY, false);
+            fade.fill(ix + 2, ry + 5, 3, ENTRY - 10, NoteStyle.color(note.color()));
             if (gui.hit(id + "#hit", ix, ry, width, ENTRY, true, null)) {
                 open(note);
             }
             String title = note.title().isBlank() ? text("mneme.notes.untitled") : note.title();
-            gui.text(gui.fit(title, width - 16), ix + 8, ry + 5, theme.titleColor());
-            gui.text(gui.fit(preview(note), width - 16), ix + 8, ry + 17, theme.textSecondary());
+            gui.text(gui.fit(title, width - 24), ix + 12, ry + 5, theme.titleColor());
+            gui.text(gui.fit(preview(note), width - 24), ix + 12, ry + 17, theme.textSecondary());
             if (note.kind() == NoteKind.CHECKLIST) {
                 String progress = text("mneme.notes.progress", note.doneCount(), note.items().size());
                 gui.right(progress, ix + width - 8, ry + 5, theme.textSecondary());
@@ -127,13 +129,44 @@ final class NotesPage {
             return;
         }
         y += ROW + GAP;
+        renderStyle(ix, y, iw);
+        y += ROW + GAP;
+        int rest = ch - 2 * (ROW + GAP);
         if (current.kind() == NoteKind.CHECKLIST) {
-            renderItems(ix, y, iw, ch - ROW - GAP);
+            renderItems(ix, y, iw, rest);
             return;
         }
-        String body = gui.textArea(BODY, ix, y, iw, ch - ROW - GAP, text("mneme.notes.body_hint"), 6000);
+        String body = gui.textArea(BODY, ix, y, iw, rest, text("mneme.notes.body_hint"), 6000);
         if (!body.equals(current.text())) {
             current.setText(body);
+            store.markDirty();
+        }
+    }
+
+    private void renderStyle(int ix, int y, int iw) {
+        int size = 16;
+        int gap = 5;
+        for (int i = 0; i < NoteStyle.COLORS.length; i++) {
+            int sx = ix + 2 + i * (size + gap);
+            if (gui.swatch("note-color" + i, sx, y + (ROW - size) / 2, size, NoteStyle.COLORS[i],
+                    current.color() == i, false, text("mneme.notes.color." + NoteStyle.COLOR_KEYS[i]))) {
+                current.setColor(i);
+                store.markDirty();
+            }
+        }
+        int segmentsX = ix + 2 + NoteStyle.COLORS.length * (size + gap) + 10;
+        NoteMaterial[] materials = NoteMaterial.values();
+        String[] labels = new String[materials.length];
+        String[] tips = new String[materials.length];
+        for (int i = 0; i < materials.length; i++) {
+            String key = materials[i].name().toLowerCase();
+            labels[i] = text("mneme.notes.material." + key);
+            tips[i] = text("mneme.notes.material." + key + ".tooltip");
+        }
+        int picked = gui.segmented("note-material", segmentsX, y, ix + iw - segmentsX, ROW, labels,
+                current.material().ordinal(), tips, null);
+        if (picked >= 0) {
+            current.setMaterial(materials[picked]);
             store.markDirty();
         }
     }

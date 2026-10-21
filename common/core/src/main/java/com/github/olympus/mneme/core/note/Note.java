@@ -9,6 +9,8 @@ public final class Note {
     private String title = "";
     private NoteKind kind = NoteKind.TEXT;
     private String text = "";
+    private int color;
+    private NoteMaterial material = NoteMaterial.PAPER;
     private List<CheckItem> items = new ArrayList<>();
     private long updated = System.currentTimeMillis();
 
@@ -40,6 +42,24 @@ public final class Note {
 
     public void setText(String value) {
         text = value;
+        touch();
+    }
+
+    public int color() {
+        return color;
+    }
+
+    public void setColor(int value) {
+        color = value;
+        touch();
+    }
+
+    public NoteMaterial material() {
+        return material == null ? NoteMaterial.PAPER : material;
+    }
+
+    public void setMaterial(NoteMaterial value) {
+        material = value;
         touch();
     }
 
