@@ -58,5 +58,18 @@
   "mneme.calc.history": "History",
   "mneme.calc.clear": "Clear",
   "mneme.calc.clear.tooltip": "Forgets every past calculation.",
-  "mneme.calc.reuse": "Click to use this calculation again."
+  "mneme.calc.reuse": "Click to use this calculation again.",
+  "mneme.tab.timers": "Timers",
+  "mneme.tab.timers.tooltip": "Alarms that ring after a time you pick.",
+  "mneme.timers.name_hint": "Name (optional)",
+  "mneme.timers.time_hint": "e.g. 10m, 1h30m",
+  "mneme.timers.start": "Start",
+  "mneme.timers.start.tooltip": "Starts a timer. Minutes unless you add h, m or s.",
+  "mneme.timers.preset.tooltip": "Starts a %s timer.",
+  "mneme.timers.invalid": "Try something like 10m, 1h30m, 90s or 1:30",
+  "mneme.timers.empty": "No timers running",
+  "mneme.timers.unnamed": "Timer",
+  "mneme.timers.finished": "Done",
+  "mneme.timers.remove": "Removes this timer.",
+  "mneme.timers.done": "Timer finished"
 }

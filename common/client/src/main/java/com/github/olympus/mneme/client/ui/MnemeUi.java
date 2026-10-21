@@ -16,12 +16,14 @@ public final class MnemeUi extends UiShell {
 
     private enum Tab {
         NOTES,
+        TIMERS,
         CALCULATOR,
         APPEARANCE
     }
 
     private final AppearancePanel appearance;
     private final NotesPage notes;
+    private final TimersPage timers;
     private final CalculatorPage calculator;
     private Tab tab = Tab.NOTES;
 
@@ -29,6 +31,7 @@ public final class MnemeUi extends UiShell {
         super(host);
         this.appearance = new AppearancePanel(gui(), fade());
         this.notes = new NotesPage(gui(), fade(), MnemeData.notes());
+        this.timers = new TimersPage(gui(), fade());
         this.calculator = new CalculatorPage(gui(), fade());
     }
 
@@ -75,9 +78,12 @@ public final class MnemeUi extends UiShell {
         }
         y += 26;
 
-        String[] tabs = {text("mneme.tab.notes"), text("mneme.tab.calculator"), text("mneme.tab.appearance")};
+        String[] tabs = {
+            text("mneme.tab.notes"), text("mneme.tab.timers"), text("mneme.tab.calculator"),
+            text("mneme.tab.appearance")
+        };
         String[] tips = {
-            text("mneme.tab.notes.tooltip"), text("mneme.tab.calculator.tooltip"),
+            text("mneme.tab.notes.tooltip"), text("mneme.tab.timers.tooltip"), text("mneme.tab.calculator.tooltip"),
             text("mneme.tab.appearance.tooltip")
         };
         int chosen = gui().segmented("tabs", ix, y, iw, 20, tabs, tab.ordinal(), tips, null);
@@ -96,6 +102,7 @@ public final class MnemeUi extends UiShell {
         float before = beginContent();
         switch (tab) {
             case NOTES -> notes.render(ix, y, iw, contentHeight);
+            case TIMERS -> timers.render(ix, y, iw, contentHeight);
             case CALCULATOR -> calculator.render(ix, y, iw, contentHeight);
             case APPEARANCE -> {
                 if (appearance.render(ix, y, iw, contentHeight, this::previewToast)) {

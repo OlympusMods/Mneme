@@ -16,5 +16,6 @@ public final class MnemeHooks {
             Overlays.add(new PinnedOverlay(MnemeData.notes()));
         }
         MnemeClient.keys().poll(minecraft);
+        Alarms.tick(minecraft);
     }
 }
