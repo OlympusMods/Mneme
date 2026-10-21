@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[53,)"
+license="GPL-3.0-only"
+
+[[mods]]
+modId="mneme"
+version="${mod_version}"
+displayName="Mneme"
+authors="Akis"
+logoFile="icon.png"
+
+description='''Notes and checklists inside Minecraft, with coordinates and pinned overlays.'''
+
+[[dependencies.mneme]]
+    modId="forge"
+    mandatory=true
+    versionRange="[53,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.mneme]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.21.2,1.21.4)"
+    ordering="NONE"
+    side="BOTH"
+
+[[mixins]]
+config = "mneme.mixins.json"
