@@ -182,7 +182,7 @@ public final class Macros {
             if (minecraft.player != null) {
                 echoing = true;
                 try {
-                    minecraft.player.displayClientMessage(Component.literal(text), false);
+                    Compat.echo(minecraft, text);
                 } finally {
                     echoing = false;
                 }

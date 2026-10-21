@@ -2,6 +2,7 @@ package com.github.olympus.mneme.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.Level;
@@ -12,6 +13,10 @@ public final class Compat {
 
     public static String dimension(Level level) {
         return level.dimension().location().getPath();
+    }
+
+    public static void echo(Minecraft minecraft, String text) {
+        minecraft.player.displayClientMessage(Component.literal(text), false);
     }
 
     public static boolean playSound(Minecraft minecraft, String id, float volume, float pitch) {
