@@ -25,5 +25,12 @@ description='''Notes and checklists inside Minecraft, with coordinates and pinne
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.mneme]]
+    modId="proteus"
+    mandatory=true
+    versionRange="[1.0.0,)"
+    ordering="NONE"
+    side="BOTH"
+
 [[mixins]]
 config = "mneme.mixins.json"
