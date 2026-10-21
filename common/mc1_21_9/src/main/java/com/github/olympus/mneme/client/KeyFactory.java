@@ -13,7 +13,7 @@ public final class KeyFactory {
     }
 
     public static KeyBindings create(KeyMapping.Category category) {
-        return new KeyBindings(key("action", GLFW.GLFW_KEY_K, category));
+        return new KeyBindings(key("menu", GLFW.GLFW_KEY_N, category));
     }
 
     private static KeyMapping key(String name, int code, KeyMapping.Category category) {

@@ -1,6 +1,13 @@
 {
   "key.categories.mneme": "Mneme",
   "key.category.mneme.main": "Mneme",
-  "key.mneme.action": "Example Action",
-  "mneme.message.pressed": "Mneme: pressed %s times"
+  "key.mneme.menu": "Open Mneme Menu",
+  "mneme.screen.title": "Mneme",
+  "mneme.screen.done": "Done",
+  "mneme.tab.notes": "Notes",
+  "mneme.tab.notes.tooltip": "Your notes and checklists.",
+  "mneme.tab.appearance": "Appearance",
+  "mneme.tab.appearance.tooltip": "Style, accent color and where toasts appear.",
+  "mneme.notes.empty": "No notes yet",
+  "mneme.toast.preview": "This is how a Mneme toast looks"
 }

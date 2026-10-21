@@ -11,7 +11,7 @@ public final class KeyFactory {
     }
 
     public static KeyBindings create() {
-        return new KeyBindings(key("action", GLFW.GLFW_KEY_K));
+        return new KeyBindings(key("menu", GLFW.GLFW_KEY_N));
     }
 
     private static KeyMapping key(String name, int code) {
