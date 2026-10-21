@@ -20,6 +20,8 @@ sourceSets.main.resources {
 }
 
 repositories {
+    mavenLocal()
+    mavenLocal()
 }
 
 base {
@@ -73,7 +75,8 @@ configurations {
 }
 
 dependencies {
-
+    implementation "com.github.olympus.proteus:proteus-neoforge-26.1-26.1.2:${project.proteus_version}"
+    implementation "com.github.olympus.proteus:proteus-neoforge-26.1-26.1.2:${project.proteus_version}"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

@@ -2,7 +2,44 @@
 
 Notes and checklists inside Minecraft, with coordinates and pinned overlays.
 
-Describe what the mod does here, what makes it worth installing and how to use it.
+Mneme keeps your notes, timers, calculations and macros one key away. Press **N** in game (rebindable under Controls) to open the menu.
+
+## Features
+
+**Notes**
+- Text notes and checklists, saved in `config/mneme/notes.json`
+- Word wrapped editor with a title, so long notes stay readable
+- A **Coords** button that writes your position and dimension where the cursor is, in a note or in a checklist item
+- Eight colors and a paper, plain or black material for every note
+- Pin notes to the left or right edge of the screen and scale them from 50% to 200%
+
+**Timers**
+- Start a timer from a preset or type a time like `10m`, `1h30m`, `90s` or `1:30`
+- A toast and a sound when it rings, even for a timer that ran out while the game was closed
+
+**Calculator**
+- Typed math with `+ - * / % ^`, brackets, `sqrt`, `min`, `max`, `ans` and more
+- Understands Minecraft sizes: `3 stacks + 12`, `2 shulkers / 5`, `1 dchest`
+- Shows big results as shulkers, stacks and items, and keeps a history
+
+**Macros**
+- Run a script when you press a key, join a world, die, every few seconds, or when a chat message contains some text
+- The script is one command per line: `say`, `command`, `echo`, `toast`, `wait`, and `repeat` with `end`
+- `{x}`, `{y}`, `{z}`, `{dimension}` and `{player}` work in any line, and `{message}` in chat macros
+
+```
+say I am at {x} {y} {z}
+wait 2s
+repeat 3
+  echo still here
+  wait 1s
+end
+command time set day
+```
+
+Waits take ticks (`20t`), seconds (`2s`) or just a number of seconds. Lines starting with `#` are ignored.
+
+**Appearance** is shared with every Olympus mod through [Proteus](https://github.com/OlympusMods/Proteus): Modern or Classic style, accent color, blur, animations and where toasts appear.
 
 ## Supported versions
 
@@ -28,7 +65,7 @@ Fabric needs Fabric API. NeoForge has no stable release for 1.20.2 or 1.21.2 and
 ## Installing
 
 1. Download the jar for your loader and Minecraft version from [Modrinth](https://modrinth.com/mod/mneme) or [Releases](https://github.com/OlympusMods/Mneme/releases).
-2. Put it in your `mods` folder. Fabric also needs Fabric API.
+2. Put it in your `mods` folder together with [Proteus](https://github.com/OlympusMods/Proteus), the UI library Mneme draws its menu with. Fabric also needs Fabric API.
 
 ## Building
 
@@ -67,13 +104,18 @@ Without any token the tasks only do a dry run. The Minecraft versions each jar i
 
 ## Project layout
 
-This branch holds Minecraft 26.1 to 26.1.2. The other lines are on the branches listed above.
+This branch holds Minecraft 1.21 to 1.21.11. The other lines are on the branches listed above.
 
 ```
 common/
   core/        Loader- and version-independent logic
   client/      Code shared by every build
-  mc26/       Minecraft-specific glue and mixins for 26.1-26.1.2
+  mc1_21/     Minecraft-specific glue and mixins for 1.21-1.21.1
+  mc1_21_2/   ... for 1.21.2-1.21.3
+  mc1_21_4/   ... for 1.21.4-1.21.5
+  mc1_21_6/   ... for 1.21.6-1.21.8
+  mc1_21_9/   ... for 1.21.9-1.21.10
+  mc1_21_11/  ... for 1.21.11
   resources/   Language file and icon
 Fabric-*/  Forge-*/  NeoForge-*/    Thin per-loader projects
 publish.gradle   Modrinth and CurseForge setup shared by every project
