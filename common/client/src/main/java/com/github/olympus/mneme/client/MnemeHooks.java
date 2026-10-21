@@ -17,5 +17,6 @@ public final class MnemeHooks {
         }
         MnemeClient.keys().poll(minecraft);
         Alarms.tick(minecraft);
+        Macros.tick(minecraft);
     }
 }

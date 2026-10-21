@@ -18,6 +18,7 @@ public final class MnemeUi extends UiShell {
         NOTES,
         TIMERS,
         CALCULATOR,
+        MACROS,
         APPEARANCE
     }
 
@@ -25,6 +26,7 @@ public final class MnemeUi extends UiShell {
     private final NotesPage notes;
     private final TimersPage timers;
     private final CalculatorPage calculator;
+    private final MacrosPage macros;
     private Tab tab = Tab.NOTES;
 
     public MnemeUi(UiHost host) {
@@ -33,6 +35,7 @@ public final class MnemeUi extends UiShell {
         this.notes = new NotesPage(gui(), fade(), MnemeData.notes());
         this.timers = new TimersPage(gui(), fade());
         this.calculator = new CalculatorPage(gui(), fade());
+        this.macros = new MacrosPage(gui(), fade(), MnemeData.macros());
     }
 
     @Override
@@ -41,17 +44,32 @@ public final class MnemeUi extends UiShell {
             notes.back();
             return true;
         }
+        if (tab == Tab.MACROS && macros.editing()) {
+            macros.back();
+            return true;
+        }
         return false;
+    }
+
+    @Override
+    public boolean keyPressed(int key, int mods) {
+        if (tab == Tab.MACROS && macros.capturing()) {
+            macros.capture(key);
+            return true;
+        }
+        return super.keyPressed(key, mods);
     }
 
     @Override
     protected void onTick() {
         MnemeData.notes().flush();
+        MnemeData.macros().flush();
     }
 
     @Override
     public void removed() {
         MnemeData.notes().flush();
+        MnemeData.macros().flush();
     }
 
     @Override
@@ -80,11 +98,11 @@ public final class MnemeUi extends UiShell {
 
         String[] tabs = {
             text("mneme.tab.notes"), text("mneme.tab.timers"), text("mneme.tab.calculator"),
-            text("mneme.tab.appearance")
+            text("mneme.tab.macros"), text("mneme.tab.appearance")
         };
         String[] tips = {
             text("mneme.tab.notes.tooltip"), text("mneme.tab.timers.tooltip"), text("mneme.tab.calculator.tooltip"),
-            text("mneme.tab.appearance.tooltip")
+            text("mneme.tab.macros.tooltip"), text("mneme.tab.appearance.tooltip")
         };
         int chosen = gui().segmented("tabs", ix, y, iw, 20, tabs, tab.ordinal(), tips, null);
         if (chosen >= 0) {
@@ -104,6 +122,7 @@ public final class MnemeUi extends UiShell {
             case NOTES -> notes.render(ix, y, iw, contentHeight);
             case TIMERS -> timers.render(ix, y, iw, contentHeight);
             case CALCULATOR -> calculator.render(ix, y, iw, contentHeight);
+            case MACROS -> macros.render(ix, y, iw, contentHeight);
             case APPEARANCE -> {
                 if (appearance.render(ix, y, iw, contentHeight, this::previewToast)) {
                     restartContentFade();

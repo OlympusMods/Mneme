@@ -1,13 +1,22 @@
 package com.github.olympus.mneme.client;
 
+import com.github.olympus.mneme.core.macro.MacroStore;
 import com.github.olympus.mneme.core.note.NoteStore;
 import com.github.olympus.mneme.core.timer.TimerStore;
 
 public final class MnemeData {
     private static NoteStore notes;
     private static TimerStore timers;
+    private static MacroStore macros;
 
     private MnemeData() {
+    }
+
+    public static synchronized MacroStore macros() {
+        if (macros == null) {
+            macros = new MacroStore(MnemeClient.configDirectory().resolve(MnemeClient.MOD_ID).resolve("macros.json"));
+        }
+        return macros;
     }
 
     public static synchronized TimerStore timers() {
