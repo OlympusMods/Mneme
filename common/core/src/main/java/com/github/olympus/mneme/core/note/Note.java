@@ -10,6 +10,9 @@ public final class Note {
     private NoteKind kind = NoteKind.TEXT;
     private String text = "";
     private int color;
+    private boolean pinned;
+    private int scale = 100;
+    private int side;
     private NoteMaterial material = NoteMaterial.PAPER;
     private List<CheckItem> items = new ArrayList<>();
     private long updated = System.currentTimeMillis();
@@ -51,6 +54,33 @@ public final class Note {
 
     public void setColor(int value) {
         color = value;
+        touch();
+    }
+
+    public boolean pinned() {
+        return pinned;
+    }
+
+    public void setPinned(boolean value) {
+        pinned = value;
+        touch();
+    }
+
+    public int scale() {
+        return scale <= 0 ? 100 : scale;
+    }
+
+    public void setScale(int percent) {
+        scale = Math.max(50, Math.min(200, percent));
+        touch();
+    }
+
+    public int side() {
+        return side;
+    }
+
+    public void setSide(int value) {
+        side = value == 1 ? 1 : 0;
         touch();
     }
 

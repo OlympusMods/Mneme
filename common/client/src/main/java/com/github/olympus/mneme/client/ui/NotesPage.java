@@ -131,7 +131,9 @@ final class NotesPage {
         y += ROW + GAP;
         renderStyle(ix, y, iw);
         y += ROW + GAP;
-        int rest = ch - 2 * (ROW + GAP);
+        renderPin(ix, y, iw);
+        y += ROW + GAP;
+        int rest = ch - 3 * (ROW + GAP);
         if (current.kind() == NoteKind.CHECKLIST) {
             renderItems(ix, y, iw, rest);
             return;
@@ -167,6 +169,32 @@ final class NotesPage {
                 current.material().ordinal(), tips, null);
         if (picked >= 0) {
             current.setMaterial(materials[picked]);
+            store.markDirty();
+        }
+    }
+
+    private void renderPin(int ix, int y, int iw) {
+        int switchWidth = Math.min(150, iw / 3);
+        if (gui.switchRow("note-pin", ix + 2, y, switchWidth, ROW, text("mneme.notes.pin"), current.pinned(), true,
+                text("mneme.notes.pin.tooltip"), text("mneme.state.on"), text("mneme.state.off"))) {
+            current.setPinned(!current.pinned());
+            store.markDirty();
+        }
+        int stepperX = ix + switchWidth + 18;
+        int stepperWidth = 100;
+        int scale = current.scale();
+        int step = gui.stepper("note-scale", stepperX, y, stepperWidth, ROW, scale + "%",
+                text("mneme.notes.scale.tooltip"), scale > 50, scale < 200);
+        if (step != 0) {
+            current.setScale(scale + step * 10);
+            store.markDirty();
+        }
+        int sideX = stepperX + stepperWidth + 10;
+        String[] sides = {text("mneme.notes.side.left"), text("mneme.notes.side.right")};
+        String[] tips = {text("mneme.notes.side.left.tooltip"), text("mneme.notes.side.right.tooltip")};
+        int picked = gui.segmented("note-side", sideX, y, ix + iw - sideX, ROW, sides, current.side(), tips, null);
+        if (picked >= 0) {
+            current.setSide(picked);
             store.markDirty();
         }
     }

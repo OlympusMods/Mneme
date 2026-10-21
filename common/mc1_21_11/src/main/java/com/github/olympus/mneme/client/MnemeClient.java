@@ -40,6 +40,6 @@ public final class MnemeClient {
     }
 
     public static void tick(Minecraft minecraft) {
-        keys().poll(minecraft);
+        MnemeHooks.tick(minecraft);
     }
 }

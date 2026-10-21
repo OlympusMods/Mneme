@@ -41,5 +41,14 @@
   "mneme.notes.material.plain": "Plain",
   "mneme.notes.material.plain.tooltip": "Clean white sheet when pinned.",
   "mneme.notes.material.black": "Black",
-  "mneme.notes.material.black.tooltip": "Dark card with light text when pinned."
+  "mneme.notes.material.black.tooltip": "Dark card with light text when pinned.",
+  "mneme.state.on": "ON",
+  "mneme.state.off": "OFF",
+  "mneme.notes.pin": "Pin to screen",
+  "mneme.notes.pin.tooltip": "Keeps this note on the side of your screen while you play.",
+  "mneme.notes.scale.tooltip": "Size of the pinned note.",
+  "mneme.notes.side.left": "Left",
+  "mneme.notes.side.left.tooltip": "Pins the note to the left edge.",
+  "mneme.notes.side.right": "Right",
+  "mneme.notes.side.right.tooltip": "Pins the note to the right edge."
 }

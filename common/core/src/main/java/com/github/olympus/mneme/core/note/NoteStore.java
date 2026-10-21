@@ -35,6 +35,16 @@ public final class NoteStore {
         return sorted;
     }
 
+    public List<Note> pinned() {
+        List<Note> pinned = new ArrayList<>();
+        for (Note note : notes) {
+            if (note.pinned()) {
+                pinned.add(note);
+            }
+        }
+        return pinned;
+    }
+
     public Note add(NoteKind kind) {
         Note note = new Note();
         note.setKind(kind);
