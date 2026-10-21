@@ -5,6 +5,9 @@ plugins {
 }
 
 repositories {
+	mavenLocal()
+	mavenLocal()
+	mavenLocal()
 }
 
 loom {
@@ -35,6 +38,9 @@ sourceSets {
 }
 
 dependencies {
+	modImplementation "com.github.olympus.proteus:proteus-fabric-1.20.3-1.20.6:${project.proteus_version}"
+	modImplementation "com.github.olympus.proteus:proteus-fabric-1.20.3-1.20.6:${project.proteus_version}"
+	modImplementation "com.github.olympus.proteus:proteus-fabric-1.20.3-1.20.6:${project.proteus_version}"
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
