@@ -16,7 +16,7 @@ public final class GameInfo {
     }
 
     public static String dimension(Minecraft minecraft) {
-        return minecraft.level == null ? "" : minecraft.level.dimension().location().getPath();
+        return minecraft.level == null ? "" : Compat.dimension(minecraft.level);
     }
 
     public static String expand(Minecraft minecraft, String text) {
