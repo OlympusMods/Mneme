@@ -87,7 +87,7 @@ final class NotesPage {
         for (Note note : notes) {
             String id = "note:" + note.id();
             gui.rowBackground(id, ix, ry, width, ENTRY, false);
-            fade.fill(ix + 2, ry + 5, 3, ENTRY - 10, NoteStyle.color(note.color()));
+            fade.fill(ix, ry, 3, ENTRY, NoteStyle.color(note.color()));
             if (gui.hit(id + "#hit", ix, ry, width, ENTRY, true, null)) {
                 open(note);
             }

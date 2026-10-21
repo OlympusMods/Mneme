@@ -14,6 +14,7 @@ public final class PinnedOverlay implements Overlay {
     private static final int MARGIN = 6;
     private static final int GAP = 4;
     private static final int PAD = 5;
+    private static final int BORDER = 3;
     private static final int WIDTH = 132;
     private static final int MAX_LINES = 16;
 
@@ -57,20 +58,21 @@ public final class PinnedOverlay implements Overlay {
         canvas.translate(x, y);
         canvas.scale(scale, scale);
         Draw.shadow(canvas, 0, 0, WIDTH, height, 3, 4, 70);
-        Draw.round(canvas, 0, 0, WIDTH, height, 3, paper);
-        canvas.fill(0, 3, 3, height - 6, NoteStyle.color(note.color()));
+        Draw.round(canvas, 0, 0, WIDTH, height, 3, NoteStyle.color(note.color()));
+        Draw.round(canvas, BORDER, 0, WIDTH - BORDER, height, 3, paper);
+        canvas.fill(BORDER, 0, 3, height, paper);
         String title = note.title().isBlank() ? "Untitled" : note.title();
-        canvas.text(Draw.fit(canvas, title, WIDTH - 2 * PAD - 2), PAD + 2, PAD, NoteStyle.color(note.color()), false);
+        canvas.text(Draw.fit(canvas, title, WIDTH - BORDER - 2 * PAD), BORDER + PAD, PAD, NoteStyle.color(note.color()), false);
         int ty = PAD + lineHeight + 3;
         for (String line : lines) {
-            canvas.text(line, PAD + 2, ty, ink, false);
+            canvas.text(line, BORDER + PAD, ty, ink, false);
             ty += lineHeight;
         }
         canvas.pop();
     }
 
     private static List<String> lines(Canvas canvas, Note note) {
-        int width = WIDTH - 2 * PAD - 2;
+        int width = WIDTH - BORDER - 2 * PAD;
         List<String> lines = new ArrayList<>();
         if (note.kind() == NoteKind.CHECKLIST) {
             for (CheckItem item : note.items()) {
