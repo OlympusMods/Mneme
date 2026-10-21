@@ -8,6 +8,7 @@ import com.github.olympus.proteus.client.ui.ToastOverlay;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import net.minecraft.client.Minecraft;
@@ -15,11 +16,15 @@ import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
 public final class Macros {
-    private static final Map<String, ScriptRun> RUNNING = new HashMap<>();
+    private record Active(ScriptRun run, Map<String, String> variables) {
+    }
+
+    private static final Map<String, Active> RUNNING = new HashMap<>();
     private static final Set<String> HELD = new HashSet<>();
     private static final Map<String, Integer> COUNTERS = new HashMap<>();
     private static final int JOIN_DELAY = 40;
 
+    private static boolean echoing;
     private static boolean inWorld;
     private static boolean dead;
     private static int joinCountdown;
@@ -37,25 +42,51 @@ public final class Macros {
             joinCountdown = 0;
             COUNTERS.clear();
         }
-        Iterator<Map.Entry<String, ScriptRun>> iterator = RUNNING.entrySet().iterator();
+        Iterator<Map.Entry<String, Active>> iterator = RUNNING.entrySet().iterator();
         ScriptRun.Actions actions = new GameActions(minecraft);
         while (iterator.hasNext()) {
-            ScriptRun run = iterator.next().getValue();
-            run.tick(actions, text -> GameInfo.expand(minecraft, text));
-            if (run.done()) {
+            Active active = iterator.next().getValue();
+            active.run().tick(actions, text -> GameInfo.expand(minecraft, variables(text, active.variables())));
+            if (active.run().done()) {
                 iterator.remove();
             }
         }
     }
 
     public static void start(Macro macro) {
+        start(macro, Map.of());
+    }
+
+    public static void chat(String message) {
+        if (echoing || Minecraft.getInstance().player == null) {
+            return;
+        }
+        String lower = message.toLowerCase(Locale.ROOT);
+        for (Macro macro : MnemeData.macros().all()) {
+            String pattern = macro.pattern().toLowerCase(Locale.ROOT);
+            if (macro.trigger() == Trigger.CHAT && macro.enabled() && !pattern.isEmpty()
+                    && lower.contains(pattern)) {
+                start(macro, Map.of("message", message));
+            }
+        }
+    }
+
+    private static void start(Macro macro, Map<String, String> variables) {
         if (RUNNING.containsKey(macro.id())) {
             return;
         }
         Script script = Script.parse(macro.script());
         if (!script.steps().isEmpty()) {
-            RUNNING.put(macro.id(), new ScriptRun(script));
+            RUNNING.put(macro.id(), new Active(new ScriptRun(script), variables));
         }
+    }
+
+    private static String variables(String text, Map<String, String> variables) {
+        String result = text;
+        for (Map.Entry<String, String> entry : variables.entrySet()) {
+            result = result.replace("{" + entry.getKey() + "}", entry.getValue());
+        }
+        return result;
     }
 
     public static boolean running(Macro macro) {
@@ -132,7 +163,12 @@ public final class Macros {
         @Override
         public void echo(String text) {
             if (minecraft.player != null) {
-                minecraft.player.displayClientMessage(Component.literal(text), false);
+                echoing = true;
+                try {
+                    minecraft.player.displayClientMessage(Component.literal(text), false);
+                } finally {
+                    echoing = false;
+                }
             }
         }
 
