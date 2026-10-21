@@ -50,5 +50,13 @@
   "mneme.notes.side.left": "Left",
   "mneme.notes.side.left.tooltip": "Pins the note to the left edge.",
   "mneme.notes.side.right": "Right",
-  "mneme.notes.side.right.tooltip": "Pins the note to the right edge."
+  "mneme.notes.side.right.tooltip": "Pins the note to the right edge.",
+  "mneme.tab.calculator": "Calculator",
+  "mneme.tab.calculator.tooltip": "Quick math with stacks and shulkers.",
+  "mneme.calc.hint": "Type a calculation, like 3 stacks + 12",
+  "mneme.calc.help": "Try 2 shulkers / 5, (3 + 4) * 64 or sqrt(144)",
+  "mneme.calc.history": "History",
+  "mneme.calc.clear": "Clear",
+  "mneme.calc.clear.tooltip": "Forgets every past calculation.",
+  "mneme.calc.reuse": "Click to use this calculation again."
 }
