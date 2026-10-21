@@ -23,18 +23,36 @@ final class CalculatorPage {
 
     private final Gui gui;
     private final FadeCanvas fade;
+    private final PortalPage portal;
+    private int mode;
 
     CalculatorPage(Gui gui, FadeCanvas fade) {
         this.gui = gui;
         this.fade = fade;
+        this.portal = new PortalPage(gui, fade);
     }
 
     void opened() {
-        gui.focus(INPUT);
+        if (mode == 0) {
+            gui.focus(INPUT);
+        }
     }
 
     void render(int ix, int y, int iw, int ch) {
         Theme theme = gui.theme();
+        String[] modes = {text("mneme.calc.mode.math"), text("mneme.calc.mode.portal")};
+        String[] modeTips = {text("mneme.calc.mode.math.tooltip"), text("mneme.calc.mode.portal.tooltip")};
+        int picked = gui.segmented("calc-mode", ix, y, iw, ROW, modes, mode, modeTips, null);
+        if (picked >= 0) {
+            mode = picked;
+            gui.blur();
+        }
+        y += ROW + GAP;
+        ch -= ROW + GAP;
+        if (mode == 1) {
+            portal.render(ix, y, iw, ch);
+            return;
+        }
         int top = y;
         double previous = HISTORY.isEmpty() ? 0 : HISTORY.get(0).value();
         String input = gui.field(INPUT, ix, y, iw, ROW + 4, text("mneme.calc.hint"), 120);
