@@ -18,5 +18,12 @@
   "mneme.notes.title_hint": "Title",
   "mneme.notes.body_hint": "Write something...",
   "mneme.notes.delete": "Delete",
-  "mneme.notes.delete.tooltip": "Deletes this note for good."
+  "mneme.notes.delete.tooltip": "Deletes this note for good.",
+  "mneme.notes.new_list": "New checklist",
+  "mneme.notes.new_list.tooltip": "Starts an empty checklist.",
+  "mneme.notes.item_hint": "Item",
+  "mneme.notes.item_remove": "Remove this item",
+  "mneme.notes.item_add": "Add item",
+  "mneme.notes.item_add.tooltip": "Press Enter in an item to add the next one.",
+  "mneme.notes.progress": "%s / %s"
 }

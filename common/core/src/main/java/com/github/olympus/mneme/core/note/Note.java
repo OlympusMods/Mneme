@@ -1,5 +1,7 @@
 package com.github.olympus.mneme.core.note;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public final class Note {
@@ -7,6 +9,7 @@ public final class Note {
     private String title = "";
     private NoteKind kind = NoteKind.TEXT;
     private String text = "";
+    private List<CheckItem> items = new ArrayList<>();
     private long updated = System.currentTimeMillis();
 
     public String id() {
@@ -38,6 +41,39 @@ public final class Note {
     public void setText(String value) {
         text = value;
         touch();
+    }
+
+    public List<CheckItem> items() {
+        if (items == null) {
+            items = new ArrayList<>();
+        }
+        return items;
+    }
+
+    public CheckItem addItem(int index) {
+        CheckItem item = new CheckItem();
+        items().add(Math.min(index, items().size()), item);
+        touch();
+        return item;
+    }
+
+    public void removeItem(CheckItem item) {
+        items().remove(item);
+        touch();
+    }
+
+    public void changed() {
+        touch();
+    }
+
+    public int doneCount() {
+        int count = 0;
+        for (CheckItem item : items()) {
+            if (item.done()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public long updated() {
