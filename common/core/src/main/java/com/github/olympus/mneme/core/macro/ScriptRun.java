@@ -60,14 +60,20 @@ public final class ScriptRun {
                 continue;
             }
             Step step = frame.steps.get(frame.index++);
-            switch (step) {
-                case Step.Say say -> actions.say(expand.apply(say.text()));
-                case Step.Command command -> actions.command(expand.apply(command.text()));
-                case Step.Echo echo -> actions.echo(expand.apply(echo.text()));
-                case Step.Toast toast -> actions.toast(expand.apply(toast.text()));
-                case Step.Sound sound -> actions.sound(sound.name(), sound.volume(), sound.pitch());
-                case Step.Wait wait -> waiting = wait.ticks();
-                case Step.Repeat repeat -> frames.push(new Frame(repeat.body(), repeat.times()));
+            if (step instanceof Step.Say say) {
+                actions.say(expand.apply(say.text()));
+            } else if (step instanceof Step.Command command) {
+                actions.command(expand.apply(command.text()));
+            } else if (step instanceof Step.Echo echo) {
+                actions.echo(expand.apply(echo.text()));
+            } else if (step instanceof Step.Toast toast) {
+                actions.toast(expand.apply(toast.text()));
+            } else if (step instanceof Step.Sound sound) {
+                actions.sound(sound.name(), sound.volume(), sound.pitch());
+            } else if (step instanceof Step.Wait wait) {
+                waiting = wait.ticks();
+            } else if (step instanceof Step.Repeat repeat) {
+                frames.push(new Frame(repeat.body(), repeat.times()));
             }
         }
         if (budget < 0 && !frames.isEmpty()) {
