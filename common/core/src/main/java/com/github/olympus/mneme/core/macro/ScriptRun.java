@@ -14,6 +14,8 @@ public final class ScriptRun {
         void echo(String text);
 
         void toast(String text);
+
+        void sound(String name, float volume, float pitch);
     }
 
     private static final int STEPS_PER_TICK = 200;
@@ -63,6 +65,7 @@ public final class ScriptRun {
                 case Step.Command command -> actions.command(expand.apply(command.text()));
                 case Step.Echo echo -> actions.echo(expand.apply(echo.text()));
                 case Step.Toast toast -> actions.toast(expand.apply(toast.text()));
+                case Step.Sound sound -> actions.sound(sound.name(), sound.volume(), sound.pitch());
                 case Step.Wait wait -> waiting = wait.ticks();
                 case Step.Repeat repeat -> frames.push(new Frame(repeat.body(), repeat.times()));
             }

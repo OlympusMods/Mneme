@@ -49,6 +49,10 @@ public final class Script {
                         "echo needs a message");
                 case "toast" -> add(current, rest.isEmpty() ? null : new Step.Toast(rest), errors, number,
                         "toast needs a message");
+                case "sound" -> {
+                    Step sound = sound(rest);
+                    add(current, sound, errors, number, "sound needs a name like bell or minecraft:block.anvil.land");
+                }
                 case "wait" -> {
                     int ticks = ticks(rest);
                     add(current, ticks < 0 ? null : new Step.Wait(ticks), errors, number,
@@ -92,6 +96,20 @@ public final class Script {
             errors.add("Line " + line + ": " + problem);
         } else {
             into.add(step);
+        }
+    }
+
+    private static Step sound(String text) {
+        String[] parts = text.strip().split("\\s+");
+        if (parts[0].isEmpty()) {
+            return null;
+        }
+        try {
+            float volume = parts.length > 1 ? Float.parseFloat(parts[1]) : 1f;
+            float pitch = parts.length > 2 ? Float.parseFloat(parts[2]) : 1f;
+            return new Step.Sound(parts[0], Math.max(0f, Math.min(4f, volume)), Math.max(0.5f, Math.min(2f, pitch)));
+        } catch (NumberFormatException exception) {
+            return null;
         }
     }
 

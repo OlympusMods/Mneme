@@ -15,6 +15,9 @@ public sealed interface Step {
     record Toast(String text) implements Step {
     }
 
+    record Sound(String name, float volume, float pitch) implements Step {
+    }
+
     record Wait(int ticks) implements Step {
     }
 

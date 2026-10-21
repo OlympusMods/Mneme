@@ -10,6 +10,9 @@ public final class Macro {
     private int key;
     private int interval = 60;
     private String pattern = "";
+    private boolean chatReceived = true;
+    private boolean chatSent = true;
+    private boolean chatCommand = true;
     private String script = "";
 
     public String id() {
@@ -62,6 +65,22 @@ public final class Macro {
 
     public void setPattern(String value) {
         pattern = value;
+    }
+
+    public boolean listensTo(ChatSource source) {
+        return switch (source) {
+            case RECEIVED -> chatReceived;
+            case SENT -> chatSent;
+            case COMMAND -> chatCommand;
+        };
+    }
+
+    public void setListensTo(ChatSource source, boolean value) {
+        switch (source) {
+            case RECEIVED -> chatReceived = value;
+            case SENT -> chatSent = value;
+            case COMMAND -> chatCommand = value;
+        }
     }
 
     public String script() {

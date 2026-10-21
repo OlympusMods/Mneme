@@ -1,5 +1,6 @@
 package com.github.olympus.mneme.client;
 
+import com.github.olympus.mneme.core.macro.ChatSource;
 import com.github.olympus.mneme.core.macro.Macro;
 import com.github.olympus.mneme.core.macro.Script;
 import com.github.olympus.mneme.core.macro.ScriptRun;
@@ -25,6 +26,7 @@ public final class Macros {
     private static final int JOIN_DELAY = 40;
 
     private static boolean echoing;
+    private static boolean acting;
     private static boolean inWorld;
     private static boolean dead;
     private static int joinCountdown;
@@ -57,16 +59,16 @@ public final class Macros {
         start(macro, Map.of());
     }
 
-    public static void chat(String message) {
-        if (echoing || Minecraft.getInstance().player == null) {
+    public static void chat(String message, ChatSource source) {
+        if (echoing || acting || Minecraft.getInstance().player == null) {
             return;
         }
         String lower = message.toLowerCase(Locale.ROOT);
         for (Macro macro : MnemeData.macros().all()) {
             String pattern = macro.pattern().toLowerCase(Locale.ROOT);
-            if (macro.trigger() == Trigger.CHAT && macro.enabled() && !pattern.isEmpty()
-                    && lower.contains(pattern)) {
-                start(macro, Map.of("message", message));
+            if (macro.trigger() == Trigger.CHAT && macro.enabled() && macro.listensTo(source)
+                    && !pattern.isEmpty() && lower.contains(pattern)) {
+                start(macro, Map.of("message", message, "source", source.name().toLowerCase(Locale.ROOT)));
             }
         }
     }
@@ -149,15 +151,30 @@ public final class Macros {
         @Override
         public void say(String text) {
             if (minecraft.player != null) {
-                minecraft.player.connection.sendChat(text);
+                acting = true;
+                try {
+                    minecraft.player.connection.sendChat(text);
+                } finally {
+                    acting = false;
+                }
             }
         }
 
         @Override
         public void command(String text) {
             if (minecraft.player != null) {
-                minecraft.player.connection.sendCommand(text);
+                acting = true;
+                try {
+                    minecraft.player.connection.sendCommand(text);
+                } finally {
+                    acting = false;
+                }
             }
+        }
+
+        @Override
+        public void sound(String name, float volume, float pitch) {
+            Compat.playSound(minecraft, SoundNames.resolve(name), volume, pitch);
         }
 
         @Override

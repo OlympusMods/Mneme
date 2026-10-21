@@ -101,13 +101,19 @@
   "mneme.macros.trigger.death.note": "Runs when you die.",
   "mneme.macros.trigger.death.summary": "When you die",
   "mneme.macros.trigger.chat": "Chat",
-  "mneme.macros.trigger.chat.tooltip": "Runs when a chat message contains your text.",
+  "mneme.macros.trigger.chat.tooltip": "Runs when a message you get or send, or a command, contains your text.",
   "mneme.macros.trigger.chat.summary": "Chat contains \"%s\"",
   "mneme.macros.key.none": "No key set",
   "mneme.macros.key.press": "Press a key (Esc clears)",
   "mneme.macros.key.tooltip": "Click, then press the key that starts this macro.",
   "mneme.macros.interval": "Run every",
   "mneme.macros.seconds": "seconds",
-  "mneme.macros.pattern_hint": "Text the chat message contains (use {message} in the script)",
-  "mneme.macros.script_hint": "say Hello!\\nwait 2s\\ncommand time set day\\nrepeat 3\\n  echo {x} {y} {z}\\n  wait 1s\\nend"
+  "mneme.macros.pattern_hint": "Text it contains (use {message} and {source} in the script)",
+  "mneme.macros.script_hint": "say Hello!\\nwait 2s\\ncommand time set day\\nrepeat 3\\n  echo {x} {y} {z}\\n  wait 1s\\nend",
+  "mneme.macros.source.received": "Messages you get",
+  "mneme.macros.source.received.tooltip": "Reacts to chat messages that arrive, from players or the server.",
+  "mneme.macros.source.sent": "Messages you send",
+  "mneme.macros.source.sent.tooltip": "Reacts to what you type in chat.",
+  "mneme.macros.source.command": "Your commands",
+  "mneme.macros.source.command.tooltip": "Reacts to commands you run, written with the slash, like /home."
 }

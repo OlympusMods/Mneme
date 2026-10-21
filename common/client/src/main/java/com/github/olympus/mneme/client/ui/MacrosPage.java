@@ -1,6 +1,7 @@
 package com.github.olympus.mneme.client.ui;
 
 import com.github.olympus.mneme.client.Macros;
+import com.github.olympus.mneme.core.macro.ChatSource;
 import com.github.olympus.mneme.core.macro.Macro;
 import com.github.olympus.mneme.core.macro.MacroStore;
 import com.github.olympus.mneme.core.macro.Script;
@@ -161,8 +162,8 @@ final class MacrosPage {
         }
         y += ROW + GAP;
 
-        renderTriggerSettings(ix, y, iw);
-        y += ROW + GAP;
+        int rows = renderTriggerSettings(ix, y, iw);
+        y += rows * (ROW + GAP);
 
         Script script = Script.parse(current.script());
         int errorHeight = script.errors().isEmpty() ? 0 : 12;
@@ -177,7 +178,7 @@ final class MacrosPage {
         }
     }
 
-    private void renderTriggerSettings(int ix, int y, int iw) {
+    private int renderTriggerSettings(int ix, int y, int iw) {
         Theme theme = gui.theme();
         switch (current.trigger()) {
             case KEY -> {
@@ -210,9 +211,28 @@ final class MacrosPage {
                     current.setPattern(value);
                     store.markDirty();
                 }
+                renderSources(ix, y + ROW + GAP, iw);
+                return 2;
             }
             case JOIN, DEATH -> gui.text(text("mneme.macros.trigger." + current.trigger().name().toLowerCase()
                     + ".note"), ix + 2, gui.textY(y, ROW), theme.textSecondary());
+        }
+        return 1;
+    }
+
+    private void renderSources(int ix, int y, int iw) {
+        ChatSource[] sources = ChatSource.values();
+        int width = (iw - (sources.length - 1) * GAP) / sources.length;
+        for (int i = 0; i < sources.length; i++) {
+            ChatSource source = sources[i];
+            String key = source.name().toLowerCase();
+            boolean on = current.listensTo(source);
+            if (gui.button("macro-source" + i, ix + i * (width + GAP), y, width, ROW,
+                    text("mneme.macros.source." + key), ButtonKind.NORMAL, on, true,
+                    text("mneme.macros.source." + key + ".tooltip"))) {
+                current.setListensTo(source, !on);
+                store.markDirty();
+            }
         }
     }
 
