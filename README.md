@@ -39,7 +39,7 @@ command time set day
 
 Waits take ticks (`20t`), seconds (`2s`) or just a number of seconds. Lines starting with `#` are ignored.
 
-**Appearance** is shared with every Olympus mod through [Proteus](https://github.com/OlympusMods/Proteus): Modern or Classic style, accent color, blur, animations and where toasts appear.
+**Appearance** lives on the Proteus card at the top of the menu and is shared with every Olympus mod through [Proteus](https://github.com/OlympusMods/Proteus): Modern or Classic style, accent color, blur, animations and where toasts appear.
 
 ## Supported versions
 
