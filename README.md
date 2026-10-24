@@ -21,6 +21,8 @@ Mneme keeps your notes, timers, calculations and macros one key away. Press **N*
 - Typed math with `+ - * / % ^`, brackets, `sqrt`, `min`, `max`, `ans` and more
 - Understands Minecraft sizes: `3 stacks + 12`, `2 shulkers / 5`, `1 dchest`
 - Shows big results as shulkers, stacks and items, and keeps a history
+- A Nether portal mode that turns Overworld coordinates into Nether ones and back
+- Pin named portal spots; each pin marks its spot with light beams and a distance readout in both the Overworld and the Nether, and can be turned on and off. Pins are saved in `config/mneme/portals.json`
 
 **Macros**
 - Run a script when you press a key, join a world, die, every few seconds, or when a chat message contains some text
