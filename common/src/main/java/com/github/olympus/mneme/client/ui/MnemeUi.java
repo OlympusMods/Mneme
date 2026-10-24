@@ -1,10 +1,8 @@
 package com.github.olympus.mneme.client.ui;
 
 import com.github.olympus.mneme.client.MnemeData;
-import com.github.olympus.proteus.client.ui.AppearancePanel;
 import com.github.olympus.proteus.client.ui.ButtonKind;
 import com.github.olympus.proteus.client.ui.Theme;
-import com.github.olympus.proteus.client.ui.ToastOverlay;
 import com.github.olympus.proteus.client.ui.UiHost;
 import com.github.olympus.proteus.client.ui.UiShell;
 import net.minecraft.network.chat.Component;
@@ -18,11 +16,9 @@ public final class MnemeUi extends UiShell {
         NOTES,
         TIMERS,
         CALCULATOR,
-        MACROS,
-        APPEARANCE
+        MACROS
     }
 
-    private final AppearancePanel appearance;
     private final NotesPage notes;
     private final TimersPage timers;
     private final CalculatorPage calculator;
@@ -31,7 +27,6 @@ public final class MnemeUi extends UiShell {
 
     public MnemeUi(UiHost host) {
         super(host);
-        this.appearance = new AppearancePanel(gui(), fade());
         this.notes = new NotesPage(gui(), fade(), MnemeData.notes());
         this.timers = new TimersPage(gui(), fade());
         this.calculator = new CalculatorPage(gui(), fade());
@@ -76,8 +71,8 @@ public final class MnemeUi extends UiShell {
     protected void renderContent(Theme theme) {
         int pw = windowWidth();
         int ph = windowHeight();
-        int px = (width() - pw) / 2;
-        int py = (height() - ph) / 2;
+        int px = windowX(pw);
+        int py = windowY(ph);
         theme.window(fade(), px, py, pw, ph);
 
         int ix = px + PAD;
@@ -98,11 +93,11 @@ public final class MnemeUi extends UiShell {
 
         String[] tabs = {
             text("mneme.tab.notes"), text("mneme.tab.timers"), text("mneme.tab.calculator"),
-            text("mneme.tab.macros"), text("mneme.tab.appearance")
+            text("mneme.tab.macros")
         };
         String[] tips = {
             text("mneme.tab.notes.tooltip"), text("mneme.tab.timers.tooltip"), text("mneme.tab.calculator.tooltip"),
-            text("mneme.tab.macros.tooltip"), text("mneme.tab.appearance.tooltip")
+            text("mneme.tab.macros.tooltip")
         };
         int chosen = gui().segmented("tabs", ix, y, iw, 20, tabs, tab.ordinal(), tips, null);
         if (chosen >= 0) {
@@ -123,11 +118,6 @@ public final class MnemeUi extends UiShell {
             case TIMERS -> timers.render(ix, y, iw, contentHeight);
             case CALCULATOR -> calculator.render(ix, y, iw, contentHeight);
             case MACROS -> macros.render(ix, y, iw, contentHeight);
-            case APPEARANCE -> {
-                if (appearance.render(ix, y, iw, contentHeight, this::previewToast)) {
-                    restartContentFade();
-                }
-            }
         }
         endContent(before);
 
@@ -135,10 +125,6 @@ public final class MnemeUi extends UiShell {
                 null)) {
             requestClose();
         }
-    }
-
-    private void previewToast() {
-        ToastOverlay.show(text("mneme.screen.title"), text("mneme.toast.preview"), "writable_book");
     }
 
     private static String text(String key, Object... arguments) {
