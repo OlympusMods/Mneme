@@ -23,8 +23,4 @@ public final class PortalMath {
         }
         return new Point(from.x() * SCALE, from.y(), from.z() * SCALE);
     }
-
-    public static String targetDimension(Direction direction) {
-        return direction == Direction.TO_NETHER ? "the_nether" : "overworld";
-    }
 }

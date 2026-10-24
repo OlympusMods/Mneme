@@ -2,12 +2,14 @@ package com.github.olympus.mneme.client;
 
 import com.github.olympus.mneme.core.macro.MacroStore;
 import com.github.olympus.mneme.core.note.NoteStore;
+import com.github.olympus.mneme.core.portal.PortalStore;
 import com.github.olympus.mneme.core.timer.TimerStore;
 
 public final class MnemeData {
     private static NoteStore notes;
     private static TimerStore timers;
     private static MacroStore macros;
+    private static PortalStore portals;
 
     private MnemeData() {
     }
@@ -24,6 +26,13 @@ public final class MnemeData {
             timers = new TimerStore(MnemeClient.configDirectory().resolve(MnemeClient.MOD_ID).resolve("timers.json"));
         }
         return timers;
+    }
+
+    public static synchronized PortalStore portals() {
+        if (portals == null) {
+            portals = new PortalStore(MnemeClient.configDirectory().resolve(MnemeClient.MOD_ID).resolve("portals.json"));
+        }
+        return portals;
     }
 
     public static synchronized NoteStore notes() {
