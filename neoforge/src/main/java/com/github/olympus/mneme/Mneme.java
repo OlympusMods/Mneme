@@ -1,6 +1,7 @@
 package com.github.olympus.mneme;
 
 import com.github.olympus.mneme.client.KeyFactory;
+import com.github.olympus.mneme.client.MnemeMenu;
 import com.github.olympus.mneme.client.MnemeClient;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
@@ -19,6 +20,7 @@ public class Mneme {
 
     private static void onRegisterKeys(RegisterKeyMappingsEvent event) {
         MnemeClient.configure(FMLPaths.CONFIGDIR.get());
+        MnemeMenu.register();
         KeyMapping.Category category = new KeyMapping.Category(MnemeClient.id("main"));
         event.registerCategory(category);
         MnemeClient.installKeys(KeyFactory.create(category));
