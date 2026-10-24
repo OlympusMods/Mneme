@@ -1,5 +1,10 @@
 package com.github.olympus.mneme.client;
 
+import com.github.olympus.mneme.core.portal.PortalMath.Point;
+import com.github.olympus.mneme.core.portal.PortalPin;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
 
@@ -8,54 +13,51 @@ public final class Highlight {
     private static final double RANGE = 100;
     private static final String[] COMPASS = {"E", "SE", "S", "SW", "W", "NW", "N", "NE"};
 
-    private static String dimension = "";
-    private static int x;
-    private static int y;
-    private static int z;
-    private static boolean active;
     private static int ticks;
+
+    public record Target(String name, Point point, double distance, String heading) {
+        public String describe() {
+            return point.x() + " " + point.y() + " " + point.z() + "  -  " + Math.round(distance) + " blocks " + heading;
+        }
+    }
 
     private Highlight() {
     }
 
-    public static synchronized void set(String targetDimension, int targetX, int targetY, int targetZ) {
-        dimension = targetDimension;
-        x = targetX;
-        y = targetY;
-        z = targetZ;
-        active = true;
-    }
-
-    public static synchronized void clear() {
-        active = false;
-    }
-
-    public static synchronized boolean active() {
-        return active;
-    }
-
-    public static synchronized boolean visible(Minecraft minecraft) {
-        return active && minecraft.player != null && minecraft.level != null
-                && dimension.equals(Compat.dimension(minecraft.level));
-    }
-
-    public static synchronized String describe(Minecraft minecraft) {
-        double dx = x + 0.5 - minecraft.player.getX();
-        double dz = z + 0.5 - minecraft.player.getZ();
-        long distance = Math.round(Math.sqrt(dx * dx + dz * dz));
-        int slot = Math.floorMod((int) Math.round(Math.toDegrees(Math.atan2(dz, dx)) / 45.0), 8);
-        return x + " " + y + " " + z + "  -  " + distance + " blocks " + COMPASS[slot];
+    public static List<Target> visible(Minecraft minecraft) {
+        List<Target> targets = new ArrayList<>();
+        if (minecraft.player == null || minecraft.level == null) {
+            return targets;
+        }
+        String dimension = Compat.dimension(minecraft.level);
+        for (PortalPin pin : MnemeData.portals().all()) {
+            Point point = pin.shown() ? pin.in(dimension) : null;
+            if (point != null) {
+                double dx = point.x() + 0.5 - minecraft.player.getX();
+                double dz = point.z() + 0.5 - minecraft.player.getZ();
+                int slot = Math.floorMod((int) Math.round(Math.toDegrees(Math.atan2(dz, dx)) / 45.0), 8);
+                targets.add(new Target(pin.name(), point, Math.sqrt(dx * dx + dz * dz), COMPASS[slot]));
+            }
+        }
+        targets.sort(Comparator.comparingDouble(Target::distance));
+        return targets;
     }
 
     public static void tick(Minecraft minecraft) {
-        if (!visible(minecraft) || ++ticks % INTERVAL != 0) {
+        if (++ticks % INTERVAL != 0) {
             return;
         }
-        double dx = x + 0.5 - minecraft.player.getX();
-        double dz = z + 0.5 - minecraft.player.getZ();
-        if (dx * dx + dz * dz > RANGE * RANGE) {
-            return;
+        for (Target target : visible(minecraft)) {
+            if (target.distance() <= RANGE) {
+                mark(minecraft, target.point());
+            }
         }
+    }
+
+    private static void mark(Minecraft minecraft, Point point) {
+        int x = point.x();
+        int y = point.y();
+        int z = point.z();
         for (int corner = 0; corner < 8; corner++) {
             spawn(minecraft, x + (corner & 1), y + (corner >> 1 & 1), z + (corner >> 2 & 1));
         }
