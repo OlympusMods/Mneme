@@ -129,8 +129,13 @@
   "mneme.portal.range": "Portals link to the closest one within 128 blocks (16 in the Nether).",
   "mneme.portal.copy": "Copy",
   "mneme.portal.copy.tooltip": "Copies the result to the clipboard.",
-  "mneme.portal.highlight": "Highlight in the %s",
-  "mneme.portal.highlight.tooltip": "Marks the spot with light beams and a distance readout while you are in the %s.",
-  "mneme.portal.highlight.note": "The marker appears when you are in the %s.",
-  "mneme.portal.target": "Portal spot: %s"
+  "mneme.portal.name_hint": "Name for this spot",
+  "mneme.portal.pin": "Pin",
+  "mneme.portal.pin.tooltip": "Saves both sides of this portal and marks them in the Overworld and the Nether.",
+  "mneme.portal.pin.where": "Overworld %s, Nether %s",
+  "mneme.portal.pin.show.tooltip": "Shows light beams and a distance readout for this spot.",
+  "mneme.portal.pin.remove": "Remove this pin",
+  "mneme.portal.pins.empty": "Pinned spots show up here",
+  "mneme.portal.unnamed": "Portal",
+  "mneme.portal.target": "%s: %s"
 }
