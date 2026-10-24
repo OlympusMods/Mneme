@@ -1,24 +1,31 @@
 package com.github.olympus.mneme.client.ui;
 
 import com.github.olympus.mneme.client.GameInfo;
-import com.github.olympus.mneme.client.Highlight;
+import com.github.olympus.mneme.client.MnemeData;
 import com.github.olympus.mneme.core.portal.PortalMath;
 import com.github.olympus.mneme.core.portal.PortalMath.Direction;
 import com.github.olympus.mneme.core.portal.PortalMath.Point;
+import com.github.olympus.mneme.core.portal.PortalPin;
+import com.github.olympus.mneme.core.portal.PortalStore;
+import com.github.olympus.proteus.client.ui.ButtonKind;
 import com.github.olympus.proteus.client.ui.FadeCanvas;
 import com.github.olympus.proteus.client.ui.Gui;
 import com.github.olympus.proteus.client.ui.Theme;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
 final class PortalPage {
     private static final int GAP = 6;
     private static final int ROW = 20;
+    private static final int ENTRY = 34;
+    private static final String NAME = "portal-name";
     private static final String[] FIELDS = {"portal-x", "portal-y", "portal-z"};
     private static final String[] AXES = {"X", "Y", "Z"};
 
     private final Gui gui;
     private final FadeCanvas fade;
+    private final PortalStore store = MnemeData.portals();
     private Direction direction = Direction.TO_NETHER;
 
     PortalPage(Gui gui, FadeCanvas fade) {
@@ -28,6 +35,7 @@ final class PortalPage {
 
     void render(int ix, int y, int iw, int ch) {
         Theme theme = gui.theme();
+        int top = y;
         String[] labels = {text("mneme.portal.to_nether"), text("mneme.portal.to_overworld")};
         String[] tips = {text("mneme.portal.to_nether.tooltip"), text("mneme.portal.to_overworld.tooltip")};
         int picked = gui.segmented("portal-direction", ix, y, iw, ROW, labels, direction.ordinal(), tips, null);
@@ -59,7 +67,7 @@ final class PortalPage {
         if (result == null) {
             gui.centered(text("mneme.portal.help"), ix + iw / 2, y + cardHeight / 2 - 4, theme.textSecondary());
         } else {
-            String coordinates = result.x() + " " + result.y() + " " + result.z();
+            String coordinates = coordinates(result);
             gui.text(world, ix + 12, y + 8, theme.textSecondary());
             fade.push();
             fade.translate(ix + 12, y + 20);
@@ -75,22 +83,55 @@ final class PortalPage {
         }
         y += cardHeight + GAP;
 
-        boolean on = Highlight.active();
-        String label = text("mneme.portal.highlight", world);
-        if (gui.switchRow("portal-highlight", ix + 2, y, iw - 4, ROW, label, on, result != null,
-                text("mneme.portal.highlight.tooltip", world), text("mneme.state.on"), text("mneme.state.off"))) {
-            if (on) {
-                Highlight.clear();
-            } else if (result != null) {
-                Highlight.set(PortalMath.targetDimension(direction), result.x(), result.y(), result.z());
+        int pinWidth = 60;
+        String name = gui.field(NAME, ix, y, iw - pinWidth - GAP, ROW, text("mneme.portal.name_hint"), 32);
+        boolean submitted = gui.submitted(NAME);
+        if ((gui.button("portal-pin", ix + iw - pinWidth, y, pinWidth, ROW, text("mneme.portal.pin"),
+                ButtonKind.PRIMARY, false, result != null, text("mneme.portal.pin.tooltip")) || submitted)
+                && result != null) {
+            Point from = new Point(values[0], values[1], values[2]);
+            boolean toNether = direction == Direction.TO_NETHER;
+            store.add(name.trim(), toNether ? from : result, toNether ? result : from);
+            gui.setField(NAME, "");
+            gui.blur();
+        }
+        y += ROW + GAP;
+
+        List<PortalPin> pins = store.all();
+        int listHeight = ch - (y - top);
+        if (pins.isEmpty()) {
+            gui.centered(gui.fit(text("mneme.portal.pins.empty"), iw), ix + iw / 2, y + Math.min(listHeight, 40) / 2 - 4,
+                    theme.textSecondary());
+            return;
+        }
+        float scroll = gui.scrollBegin("portal-pins", ix, y, iw, listHeight);
+        int ry = y - Math.round(scroll);
+        int first = ry;
+        int width = iw - 8;
+        int toggleWidth = theme.toggleWidth() + 8;
+        int textWidth = width - toggleWidth - ROW - 30;
+        PortalPin remove = null;
+        for (PortalPin pin : pins) {
+            String id = "portal:" + pin.id();
+            theme.card(fade, ix, ry, width, ENTRY);
+            String label = pin.name().isBlank() ? text("mneme.portal.unnamed") : pin.name();
+            gui.text(gui.fit(label, textWidth), ix + 10, ry + 6, theme.titleColor());
+            String where = text("mneme.portal.pin.where", coordinates(pin.overworld()), coordinates(pin.nether()));
+            gui.text(gui.fit(where, textWidth), ix + 10, ry + 19, theme.textSecondary());
+            if (gui.switchRow(id + "#s", ix + width - ROW - 12 - toggleWidth, ry + 7, toggleWidth, ROW, "",
+                    pin.shown(), true, text("mneme.portal.pin.show.tooltip"), text("mneme.state.on"),
+                    text("mneme.state.off"))) {
+                store.show(pin, !pin.shown());
             }
+            if (gui.iconButton(id + "#x", ix + width - ROW - 6, ry + 8, ROW - 2, ROW - 2, "cross", ButtonKind.NORMAL,
+                    true, text("mneme.portal.pin.remove"))) {
+                remove = pin;
+            }
+            ry += ENTRY + 4;
         }
-        if (on && result != null) {
-            Highlight.set(PortalMath.targetDimension(direction), result.x(), result.y(), result.z());
-        }
-        if (on || result != null) {
-            y += ROW + GAP;
-            gui.text(gui.fit(text("mneme.portal.highlight.note", world), iw - 4), ix + 2, y, theme.textSecondary());
+        gui.scrollEnd(ry - first);
+        if (remove != null) {
+            store.remove(remove);
         }
     }
 
@@ -103,6 +144,10 @@ final class PortalPage {
         gui.setField(FIELDS[0], Integer.toString(minecraft.player.getBlockX()));
         gui.setField(FIELDS[1], Integer.toString(minecraft.player.getBlockY()));
         gui.setField(FIELDS[2], Integer.toString(minecraft.player.getBlockZ()));
+    }
+
+    private static String coordinates(Point point) {
+        return point.x() + " " + point.y() + " " + point.z();
     }
 
     private static Integer parse(String value) {
